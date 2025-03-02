@@ -23,17 +23,12 @@ const userSchema = new Schema({
   timestamps: true
 });
 
-// Drop existing indexes and create new ones
+// Hash password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  try {
-    await mongoose.connection.collections.users?.dropIndexes();
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
   }
+  next();
 });
 
 const User = mongoose.model('User', userSchema);

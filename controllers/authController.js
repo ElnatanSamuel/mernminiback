@@ -44,20 +44,20 @@ const authController = {
   async login(req, res) {
     try {
       const { username, password } = req.body;
-      console.log('Login attempt:', { username }); // Don't log passwords
       
+      // Add error handling for missing credentials
+      if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
+      }
+
       const user = await User.findOne({ username });
       if (!user) {
-        console.log('User not found:', username);
-        return res.status(401).json({ message: 'Invalid credentials - user not found' });
+        return res.status(401).json({ message: 'Invalid credentials' });
       }
       
       const isMatch = await bcrypt.compare(password, user.password);
-      console.log('Password match result:', isMatch);
-      
       if (!isMatch) {
-        console.log('Password mismatch for user:', username);
-        return res.status(401).json({ message: 'Invalid credentials - password mismatch' });
+        return res.status(401).json({ message: 'Invalid credentials' });
       }
       
       const token = jwt.sign(
@@ -66,7 +66,6 @@ const authController = {
         { expiresIn: '24h' }
       );
       
-      console.log('Login successful for:', username);
       res.json({ 
         token,
         role: user.role,
@@ -74,7 +73,7 @@ const authController = {
       });
     } catch (error) {
       console.error('Login error:', error);
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: 'Internal server error' });
     }
   }
 };
