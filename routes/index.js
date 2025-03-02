@@ -4,16 +4,14 @@ const authController = require('../controllers/authController');
 const ticketController = require('../controllers/ticketController');
 const { auth, isAdmin } = require('../middleware/auth');
 
-// Public auth routes
+// Public auth routes (no auth middleware)
 router.post('/auth/login', authController.login);
 router.post('/auth/signup', authController.signup);
 
-// Protected routes - apply auth middleware
+// Protected routes
 router.use(auth);
-
-// Ticket routes
-router.post('/tickets', ticketController.createTicket);
 router.get('/tickets', ticketController.getTickets);
+router.post('/tickets', ticketController.createTicket);
 router.put('/tickets/:id', isAdmin, ticketController.updateTicketStatus);
 
 module.exports = router; 

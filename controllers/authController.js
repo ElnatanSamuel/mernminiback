@@ -2,7 +2,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const JWT_SECRET = 'your-secret-key'; // Hardcode for testing
+const JWT_SECRET = 'jwt_5v8x/A?D(G+KbPeShVmYq3t6w9z$C&F)'; // Hardcode for testing
 
 const authController = {
   async signup(req, res) {
