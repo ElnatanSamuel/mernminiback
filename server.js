@@ -10,19 +10,15 @@ mongoose.connect("mongodb+srv://ktk2real:krosection999@cluster0.abfalpl.mongodb.
     process.exit(1);
   });
 
+const app = express();
 
-const corsOptions = {
-    origin: ["http://localhost:3000", "https://mernminifront.vercel.app"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  };
-  
+// CORS configuration
+app.use(cors({
+  origin: '*', // For development - should be restricted in production
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-const app = express()
-
-// Middleware
-app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use((req, res, next) => {
